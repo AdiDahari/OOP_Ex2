@@ -300,6 +300,7 @@ public class Ex2 implements Runnable {
 
             }
         }
+        return -1;
     }
     public static class Login extends JPanel {
         public Login(){
