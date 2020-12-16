@@ -7,6 +7,7 @@ import api.node_data;
 import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
+import gameClient.util.Range2Range;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,16 +24,27 @@ import java.util.List;
 public class MyFrame extends JFrame{
 	private int _ind;
 	private Arena _ar;
-	private MyPanel _panel;
-	private gameClient.util.Range2Range _w2f;
+	private static MyPanel _panel;
+	private Range2Range _w2f;
+
 	MyFrame(String a) {
 		super(a);
 		int _ind = 0;
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
+	public MyFrame(String a, int w, int h) {
+		super(a);
+		this.setSize(new Dimension(w, h));
+		this.setResizable(true);
+		this.setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setVisible(true);
+
+	}
 	public void update(Arena ar) {
 		this._ar = ar;
 		updateFrame();
+
 	}
 
 	protected void updateFrame() {
@@ -44,26 +56,35 @@ public class MyFrame extends JFrame{
 	}
 	public void paint(Graphics g) {
 		if(_ar != null) {
-			_panel = new MyPanel();
+			_panel = new MyPanel(this);
 			add(_panel);
-			_panel.setVisible(true);
+			revalidate();
 		}
 	}
-	@Override
-	public void paintComponents(Graphics g){
-		_panel.paintComponent(g);
-	}
 //	@Override
-//	public void paintComponents(Graphics g) {
-//		int w = this.getWidth();
-//		int h = this.getHeight();
-//		g.clearRect(0, 0, w, h);
-//		updateFrame();
-//		drawPokemons(g);
-//		drawGraph(g);
-//		drawAgants(g);
-//		drawInfo(g);
+//	public void paintComponents(Graphics g){
+//		int w = getWidth(), h = getHeight();
+//		g.clearRect(0,0,w,h);
+//		if(_ar != null) {
+//			updateFrame();
+//			drawGraph(g);
+//			_panel.paintComponent(g);
+//			revalidate();
+//		}
+//
 //	}
+	@Override
+	public void paintComponents(Graphics g) {
+		int w = this.getWidth();
+		int h = this.getHeight();
+		g.clearRect(0, 0, w, h);
+		updateFrame();
+		drawGraph(g);
+		_panel.drawPokemons(g);
+		_panel.drawAgents(g);
+		drawInfo(g);
+		revalidate();
+	}
 	protected void drawInfo(Graphics g) {
 		List<String> str = _ar.get_info();
 		String dt = "none";
@@ -87,44 +108,7 @@ public class MyFrame extends JFrame{
 			}
 		}
 	}
-	private void drawPokemons(Graphics g) {
-		List<CL_Pokemon> fs = _ar.getPokemons();
-		if(fs!=null) {
-		Iterator<CL_Pokemon> itr = fs.iterator();
-		
-		while(itr.hasNext()) {
-			
-			CL_Pokemon f = itr.next();
-			Point3D c = f.getLocation();
-			int r=10;
-			g.setColor(Color.green);
-			if(f.getType()<0) {g.setColor(Color.orange);}
-			if(c!=null) {
 
-				geo_location fp = this._w2f.world2frame(c);
-				g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
-			//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
-				
-			}
-		}
-		}
-	}
-	private void drawAgants(Graphics g) {
-		List<CL_Agent> rs = _ar.getAgents();
-	//	Iterator<OOP_Point3D> itr = rs.iterator();
-		g.setColor(Color.red);
-		int i=0;
-		while(rs!=null && i<rs.size()) {
-			geo_location c = rs.get(i).getLocation();
-			int r=8;
-			i++;
-			if(c!=null) {
-
-				geo_location fp = this._w2f.world2frame(c);
-				g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
-			}
-		}
-	}
 	private void drawNode(node_data n, int r, Graphics g) {
 		geo_location pos = n.getLocation();
 		geo_location fp = this._w2f.world2frame(pos);
@@ -139,5 +123,11 @@ public class MyFrame extends JFrame{
 		geo_location d0 = this._w2f.world2frame(d);
 		g.drawLine((int)s0.x(), (int)s0.y(), (int)d0.x(), (int)d0.y());
 	//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
+	}
+	public Arena getAr(){
+		return _ar;
+	}
+	public Range2Range getW2f(){
+		return this._w2f;
 	}
 }

@@ -12,26 +12,43 @@ import netscape.javascript.JSObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
+import java.util.List;
 
 public class Ex2 implements Runnable {
+    private static HashMap<Integer, List<node_data>> paths;
     private static HashMap<Integer, CL_Pokemon> dests;
-    private static MyFrame _win;
+    private static int _id = -1;
+    private static int _scNum = -1;
+    private static GUI _gui;
+    private static long dt= 150;
     private static Arena _ar;
     public static void main(String[] a) {
-        dests = new HashMap<>();
-        Thread client = new Thread(new Ex2());
-        client.start();
+//        if(a.length != 2) {
+//            _gui = new GUI("Login Page", 350,300);
+//            _gui.add(new Login());
+//            _gui.setVisible(true);
+//        }
+//        else {
+//            _id = Integer.parseInt(a[0]);
+//            _scNum = Integer.parseInt(a[1]);
+            dests = new HashMap<>();
+            paths = new HashMap<>();
+            Thread client = new Thread(new Ex2());
+            client.start();
+//        }
     }
 
     @Override
     public void run() {
         int scenario_num = 0;
-        game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
-        //	int id = 999;
-        //	game.login(id);
+        game_service game = Game_Server_Ex2.getServer(11); // you have [0,23] games
+        	int id = _id;
+        	game.login(id);
         String g = game.getGraph();
         String pks = game.getPokemons();
         dw_graph_algorithms ga = new DWGraph_Algo();
@@ -43,20 +60,31 @@ public class Ex2 implements Runnable {
         init(game);
 
         game.startGame();
-        _win.setTitle("Ex2 - Pokemon Game"+game.timeToEnd()/1000 + "s");
+        _gui.setTitle("Ex2 - Pokemon Game"+game.timeToEnd()/1000 + "s");
         int time2end = (int)game.timeToEnd();
         int ind=0;
-        long dt= 150;
 
         while(game.isRunning()) {
             moveAgants(game, gg);
             try {
                 if(ind%1==0) {
-                    _win.repaint();
-                    _win.setTitle("Ex2 - Pokemon Game - Time to end: "+game.timeToEnd()/1000 + "s");
+                    _gui.repaint();
+                    _gui.setTitle("Ex2 - Pokemon Game - Time to end: "+game.timeToEnd()/1000 + "s");
                 }
-                if((double)time2end/(double) game.timeToEnd()< 0.3) dt = 50;
-                else if((double)time2end/(double) game.timeToEnd()< 0.6) dt = 100;
+                if(dt == 50) dt = 90;
+                if(dt == 75) dt = 100;
+                if(dt == 80) dt = 100;
+                if(dt == 85) dt = 100;
+                if(dt == 90) dt = 100;
+                if((double) game.timeToEnd()/(double)time2end< 0.2) dt = 70;
+                else if((double) game.timeToEnd()/(double)time2end< 0.3) dt = 75;
+                else if((double) game.timeToEnd()/(double)time2end< 0.4) dt = 80;
+                else if((double) game.timeToEnd()/(double)time2end< 0.5) dt = 85;
+                else if((double) game.timeToEnd()/(double)time2end< 0.6) dt = 90;
+                else if((double) game.timeToEnd()/(double)time2end< 0.7) dt = 110;
+                else if((double) game.timeToEnd()/(double)time2end< 0.8) dt = 130;
+
+
 
                 Thread.sleep(dt);
                 ind++;
@@ -133,7 +161,7 @@ public class Ex2 implements Runnable {
             if(agent.getID() == agKey) agent.set_curr_fruit(pokeDest);
             if(agent.getID() != agKey && isOnPath(pokeDest, path, g)) return -1;
             if(path.size()>1 && agent.getID() != agKey && agent.getNextNode() == path.get(1).getKey())return -1;
-            if(path.size()>1 && agent.getID() != agKey && agent.getSrcNode() == path.get(1).getKey())return -1;
+//            if(path.size()>1 && agent.getID() != agKey && agent.getSrcNode() == path.get(1).getKey())return -1;
         }
         if(path.size() > 1) return path.get(1).getKey();
         else return minSrc;
@@ -152,12 +180,12 @@ public class Ex2 implements Runnable {
         _ar = new Arena();
         _ar.setGraph(gg);
         _ar.setPokemons(Arena.json2Pokemons(fs));
-        _win = new MyFrame("test Ex2");
-        _win.setSize(1000, 700);
-        _win.update(_ar);
+        _gui = new GUI("test Ex2");
+        _gui.setSize(1000, 700);
+        _gui.update(_ar);
 
-
-        _win.setVisible(true);
+        _gui.show();
+//        _win.setVisible(true);
         String info = game.toString();
         JSONObject line;
         try {
@@ -186,5 +214,64 @@ public class Ex2 implements Runnable {
             if(p.get_edge() == g.getEdge(path.get(i).getKey(), path.get(i+1).getKey())) return true;
         }
         return false;
+    }
+    private static void pathInit(CL_Agent a, directed_weighted_graph g){
+        boolean flag = false;
+        List<CL_Pokemon> p = _ar.getPokemons();
+        for(CL_Pokemon pp: p){
+            flag = false;
+            Arena.updateEdge(pp, g);
+            for(List<node_data> path: paths.values()){
+                if(isOnPath(pp, path, g)){
+                    flag = true;
+                    break;
+                }
+            }
+            if(flag) continue;
+
+        }
+    }
+    public static class Login extends JPanel {
+        public Login(){
+            super();
+            setSize(500,500);
+            setLayout(null);
+            JLabel scNum = new JLabel("Scenario");
+            scNum.setBounds(50,100,260,25);
+            scNum.setFont(new Font("Arial", Font.PLAIN, 15));
+            scNum.setForeground(Color.black);
+            scNum.setBackground(Color.LIGHT_GRAY);
+            scNum.setOpaque(true);
+            add(scNum);
+            JTextField scIn = new JTextField();
+            scIn.setFont(new Font("Arial", Font.PLAIN, 10));
+            scIn.setBounds(150, 103,150,20);
+            add(scIn);
+            JLabel idNum = new JLabel("I.D.");
+            idNum.setBounds(50,150,260,25);
+            idNum.setForeground(Color.black);
+            idNum.setBackground(Color.LIGHT_GRAY);
+            idNum.setOpaque(true);
+            add(idNum);
+            JTextField idIn = new JTextField();
+            idIn.setFont(new Font("Arial", Font.PLAIN, 10));
+            idIn.setBounds(150, 153,150,20);
+            add(idIn);
+            String s1 = scIn.getText();
+            String s2 = idIn.getText();
+            JButton start = new JButton("START");
+            start.setFont(new Font("Arial", Font.ITALIC, 18));
+            start.setBounds(120,190,100,20);
+            start.setForeground(Color.white);
+            start.setBackground(Color.green.darker().darker());
+            start.setBorder(BorderFactory.createLineBorder(Color.black,2));
+            add(start);
+            start.addActionListener(e -> _id = Integer.parseInt(s2));
+            start.addActionListener(e -> _scNum = Integer.parseInt(s1));
+
+            start.addActionListener(e -> _gui.setVisible(false));
+        };
+
+
     }
 }
