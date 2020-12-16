@@ -120,7 +120,7 @@ public class Ex2 implements Runnable {
             int src = ag.getSrcNode();
             double v = ag.getValue();
             if(dest==-1) {
-                dest = nextNode(gg, src, id);
+                dest = betterNextNode(gg, src, id);
                 if(dest == -1) continue;
                 game.chooseNextEdge(ag.getID(), dest);
                 System.out.println("Agent: "+id+", val: "+v+"   turned to node: "+dest);
@@ -164,6 +164,60 @@ public class Ex2 implements Runnable {
 //            if(path.size()>1 && agent.getID() != agKey && agent.getSrcNode() == path.get(1).getKey())return -1;
         }
         if(path.size() > 1) return path.get(1).getKey();
+        else return minSrc;
+    }
+    private static int betterNextNode(directed_weighted_graph g, int src, int agKey) {
+        dw_graph_algorithms ga = new DWGraph_Algo(g);
+        int ans = -1;
+        double minDist = Double.POSITIVE_INFINITY;
+        int minDest = -1;
+        int minSrc = -1;
+        CL_Pokemon pokeDest = null;
+        List<CL_Pokemon> p = _ar.getPokemons();
+        List<CL_Agent> a = _ar.getAgents();
+        for(CL_Pokemon poke : p){
+            _ar.updateEdge(poke, g);
+
+        }
+        for(CL_Pokemon poke : p){
+            for(List<node_data> path : paths.values()){
+                if(isOnPath(poke, path, g)) continue;
+            }
+            for(CL_Agent agent : a){
+                if(agent.getID() != agKey && poke == agent.get_curr_fruit()) continue;
+            }
+            double val = poke.getValue();
+            if(val < 1) continue;
+            if(dests.values().contains(poke)) continue;
+            else if(ga.shortestPathDist(src, poke.get_edge().getDest()) < minDist) {
+                minDist = ga.shortestPathDist(src, poke.get_edge().getDest());
+                minDest = poke.get_edge().getDest();
+                minSrc = poke.get_edge().getSrc();
+                pokeDest = poke;
+            }
+        }
+        if(pokeDest != null) dests.put(agKey, pokeDest);
+        List<node_data> path = ga.shortestPath(src, minDest);
+        for(CL_Agent agent : a){
+            if(agent.getID() == agKey) agent.set_curr_fruit(pokeDest);
+            if(agent.getID() != agKey && isOnPath(pokeDest, path, g)) return -1;
+            if(path.size()>1 && agent.getID() != agKey && agent.getNextNode() == path.get(1).getKey())return -1;
+//            if(path.size()>1 && agent.getID() != agKey && agent.getSrcNode() == path.get(1).getKey())return -1;
+        }
+        if(path.size() > 1){
+            if(path != null){
+                for(node_data n : path){
+                    for(List<node_data> nn: paths.values()){
+
+                        for(node_data nnn: nn){
+                            if(nnn == n) return -1;
+                        }
+                    }
+                }
+            }
+            paths.put(agKey, path);
+            return path.get(1).getKey();
+        }
         else return minSrc;
     }
     private void init(game_service game) {
@@ -229,6 +283,22 @@ public class Ex2 implements Runnable {
             }
             if(flag) continue;
 
+        }
+    }
+    private static int bestPathVal(directed_weighted_graph g, int src){
+        dw_graph_algorithms ga = new DWGraph_Algo(g);
+        List<CL_Pokemon> p = _ar.getPokemons();
+        for(CL_Pokemon poke: p){
+            Arena.updateEdge(poke, g);
+        }
+        double bestVal = -1;
+        for(node_data n : g.getV()){
+            List<node_data> path = ga.shortestPath(src, n.getKey());
+            for(int i = 0; i < path.size()-1; i++){
+                edge_data e = g.getEdge(g.getNode(i).getKey(), g.getNode(i+1).getKey());
+
+
+            }
         }
     }
     public static class Login extends JPanel {
