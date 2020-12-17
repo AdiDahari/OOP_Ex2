@@ -70,8 +70,7 @@ public class EdgeData implements edge_data {
         if (!(o instanceof EdgeData)) return false;
         EdgeData edgeData = (EdgeData) o;
         return src == edgeData.src &&
-                dest == edgeData.dest &&
-                w == edgeData.w;
+                dest == edgeData.dest;
     }
 
     @Override

@@ -113,7 +113,7 @@ public class GUI extends JFrame {
 
 
     }
-    GUI(String a) {
+    public GUI(String a) {
         super(a);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
