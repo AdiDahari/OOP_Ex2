@@ -1,1 +1,1 @@
-<iframe src="https://giphy.com/embed/rAm0u2k17rM3e" width="480" height="336" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/pokemon-school-college-rAm0u2k17rM3e">via GIPHY</a></p>
+![]https://giphy.com/gifs/pokemon-school-college-rAm0u2k17rM3e.gif
