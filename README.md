@@ -1,1 +1,1 @@
-![]https://giphy.com/gifs/pokemon-school-college-rAm0u2k17rM3e.gif
+![]https://media.giphy.com/media/rAm0u2k17rM3e/giphy.gif
