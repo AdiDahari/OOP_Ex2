@@ -36,7 +36,18 @@ public class CL_Pokemon {
 	public edge_data get_edge() {
 		return _edge;
 	}
-
+	public int getDestNode(){
+		if(_type > 1){
+			return Math.max(_edge.getDest(), _edge.getSrc());
+		}
+		return Math.min(_edge.getDest(), _edge.getSrc());
+	}
+	public int getSrcNode(){
+		if(_type < 1){
+			return Math.max(_edge.getDest(), _edge.getSrc());
+		}
+		return Math.min(_edge.getDest(), _edge.getSrc());
+	}
 	public void set_edge(edge_data _edge) {
 		this._edge = _edge;
 	}

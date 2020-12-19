@@ -42,6 +42,7 @@ public class Ex2 implements Runnable {
     @Override
     public void run() {
         game_service game = Game_Server_Ex2.getServer(_scNum); // you have [0,23] games
+
         //game.login(_id);
         String g = game.getGraph();
         String pks = game.getPokemons();
@@ -57,7 +58,7 @@ public class Ex2 implements Runnable {
         _gui.setTitle("Ex2 - Pokemon Game"+game.timeToEnd()/1000 + "s");
         int time2end = (int)game.timeToEnd();
         int ind=0;
-        int dt = 200;
+        int dt = 250;
         while(game.isRunning()) {
             moveAgants(game, gg);
             try {
@@ -66,15 +67,18 @@ public class Ex2 implements Runnable {
                     _gui.setTitle("Ex2 - Pokemon Game - Time to end: "+game.timeToEnd()/1000 + "s" );
                 }
                 if(dt == 50) dt = 55;
-                else if(dt == 55) dt = 61;
-                else if(dt == 61) dt = 71;
-                else if(dt == 71) dt = 85;
+                else if(dt == 55) dt = 65;
+                else if(dt == 65) dt = 71;
+                else if(dt == 71) dt = 76;
                 else if((double) game.timeToEnd()/(double)time2end< 0.2) dt = 50;
+                else if((double) game.timeToEnd()/(double)time2end< 0.3) dt = 55;
                 else if((double) game.timeToEnd()/(double)time2end< 0.4) dt = 60;
-                else if((double) game.timeToEnd()/(double)time2end< 0.5) dt = 70;
-                else if((double) game.timeToEnd()/(double)time2end< 0.6) dt = 80;
-                else if((double) game.timeToEnd()/(double)time2end< 0.7) dt = 100;
-                else if((double) game.timeToEnd()/(double)time2end< 0.8) dt = 150;
+                else if((double) game.timeToEnd()/(double)time2end< 0.5) dt = 90;
+                else if((double) game.timeToEnd()/(double)time2end< 0.6) dt = 140;
+                else if((double) game.timeToEnd()/(double)time2end< 0.7) dt = 150;
+                else if((double) game.timeToEnd()/(double)time2end< 0.8) dt = 160;
+                else if((double) game.timeToEnd()/(double)time2end< 0.9) dt = 200;
+
                 Thread.sleep(dt);
                 ind++;
             }
@@ -83,7 +87,6 @@ public class Ex2 implements Runnable {
             }
         }
         String res = game.toString();
-
         System.out.println(res);
         System.exit(0);
     }
@@ -131,9 +134,15 @@ public class Ex2 implements Runnable {
 
         }
         for(CL_Pokemon poke : p){
+            boolean flag = false;
             for(CL_Agent agent : a){
-                if(agent.getID() != agKey && poke == agent.get_curr_fruit()) continue;
+                if(agent.getID() != agKey && paths.containsKey(agent.getID())){
+                    if(paths != null && paths.containsKey(agent.getID()) && paths.get(agent.getID()).contains(g.getNode(poke.get_edge().getDest()))) flag = true;
+                }
+
+                if(agent.getID() != agKey && poke == agent.get_curr_fruit()) flag = true;
             }
+            if(flag) continue;
             double val = poke.getValue();
             if(val < 1) continue;
             if(dests.values().contains(poke)) continue;
@@ -146,15 +155,13 @@ public class Ex2 implements Runnable {
         }
         if(pokeDest != null) dests.put(agKey, pokeDest);
         List<node_data> path = ga.shortestPath(src, minDest);
-        for(CL_Agent agent : a){
-            if(agent.getID() == agKey) agent.set_curr_fruit(pokeDest);
-            if(agent.getID() != agKey && isOnPath(pokeDest, path, g)) return -1;
-            if(path.size()>1 && agent.getID() != agKey && agent.getNextNode() == path.get(1).getKey())return -1;
-//            if(path.size()>1 && agent.getID() != agKey && agent.getSrcNode() == path.get(1).getKey())return -1;
+        if(path != null && path.size() > 1){
+            paths.put(agKey, path);
+            return path.get(1).getKey();
         }
-        if(path.size() > 1) return path.get(1).getKey();
         else return minSrc;
     }
+
     private void init(game_service game) {
         String fs = game.getPokemons();
         String g = game.getGraph();
@@ -190,8 +197,8 @@ public class Ex2 implements Runnable {
             for(int a = 0;a<rs;a++) {
                 int ind = a%cl_fs.size();
                 CL_Pokemon c = cl_fs.get(ind);
-                int nn = c.get_edge().getDest();
-                if(c.getType()<0 ) {nn = c.get_edge().getSrc();}
+                int nn = c.getSrcNode();
+//                if(c.getType()<0 ) {nn = c.get_edge().getSrc();}
 
                 game.addAgent(nn);
             }
@@ -204,6 +211,8 @@ public class Ex2 implements Runnable {
         }
         return false;
     }
+
+
 
     /**
      * JPanel extension for a login interface

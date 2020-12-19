@@ -91,10 +91,7 @@ public class GUI extends JFrame {
             }
         }
 
-        /**
-         * draw all the agents on the graph.
-         * @param g
-         */
+
         private void drawAgents(Graphics g) {
             ImageIcon ball = new ImageIcon("gui/pokeball.png");
             List<CL_Agent> a = _ar.getAgents();
@@ -177,12 +174,6 @@ public class GUI extends JFrame {
         g.drawString("" + n.getKey(), (int)fp.x(), (int)fp.y() - 4*r);
     }
 
-    /**
-     * draw all the edges at the graph.
-     *
-     * @param e
-     * @param g
-     */
     private void drawEdge(edge_data e, Graphics g) {
         directed_weighted_graph gg = _ar.getGraph();
         geo_location s = gg.getNode(e.getSrc()).getLocation();
