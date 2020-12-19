@@ -34,6 +34,7 @@ import java.util.List;
  *               each agent next node is selected by this method according to all relevant parameters.
  * init = initializing the game's arena and by using a json parsing functions. builds the graph according to the server information for each scenario by using the classes implemented in the api package.
  * Login (class) = the implementation of the GUI for the login page of the game. using JTextField and a graphic button with ActionListener - implemented using lambda expressions.
+ * @author Tommy Goroh and Adi Dahari.
  */
 public class Ex2 implements Runnable {
     private static HashMap<Integer, List<node_data>> paths;
@@ -74,7 +75,7 @@ public class Ex2 implements Runnable {
     public void run() {
         game_service game = Game_Server_Ex2.getServer(_scNum); // you have [0,23] games
 
-        game.login(_id);
+        //game.login(_id);
         String g = game.getGraph();
         String pks = game.getPokemons();
         dw_graph_algorithms ga = new DWGraph_Algo();
