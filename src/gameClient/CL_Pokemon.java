@@ -3,75 +3,97 @@ import api.edge_data;
 import gameClient.util.Point3D;
 import org.json.JSONObject;
 
+/**
+ * This class represents a Pokemon for the game.
+ * each Pokemon contains the following elements:
+ * 1. _edge = edge_data - which the pokemon lies on.
+ * 2. _value = double - the worth of the pokemon if captured.
+ * 3. _type = int - 2 types of pokemons different by the position on edge -
+ * 					if type < 1 the pokemon lies ont the edge from the higher keyed node, else reverted.
+ * 4. _pos = Point3D - the location of the pokemon on a 3 dimensional grid (x,y,z).
+ */
 public class CL_Pokemon {
 	private edge_data _edge;
 	private double _value;
 	private int _type;
 	private Point3D _pos;
-	private double min_dist;
-	private int min_ro;
-	
-	public CL_Pokemon(Point3D p, int t, double v, double s, edge_data e) {
+
+	/**
+	 * This is a full constructor for a new pokemon.
+	 * @param p = Point3D - location for the new pokemon.
+	 * @param t = int - type for the new pokemon.
+	 * @param v = double - value of the new pokemon.
+	 * @param e = edge_data - edge for the new pokemon to lay on.
+	 */
+	public CL_Pokemon(Point3D p, int t, double v, edge_data e) {
 		_type = t;
-	//	_speed = s;
 		_value = v;
 		set_edge(e);
 		_pos = p;
-		min_dist = -1;
-		min_ro = -1;
 	}
-	public static CL_Pokemon init_from_json(String json) {
-		CL_Pokemon ans = null;
-		try {
-			JSONObject p = new JSONObject(json);
-			int id = p.getInt("id");
 
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return ans;
-	}
+	/**
+	 * this is a toString method for the pokemon.
+	 * @return String representing the pokemon.
+	 */
 	public String toString() {return "F:{v="+_value+", t="+_type+"}";}
+
+	/**
+	 * This returns the current edge which the pokemon lies on.
+	 * @return edge_data - pokemon's edge.
+	 */
 	public edge_data get_edge() {
 		return _edge;
 	}
+
+	/**
+	 * This returns the pokemon's edge destination node's key, according to it's type.
+	 * @return int - node's key.
+	 */
 	public int getDestNode(){
 		if(_type > 1){
 			return Math.max(_edge.getDest(), _edge.getSrc());
 		}
 		return Math.min(_edge.getDest(), _edge.getSrc());
 	}
+
+	/**
+	 * This returns the pokemon's edge source node's key, according to it's type.
+	 * @return int - node's key.
+	 */
 	public int getSrcNode(){
 		if(_type < 1){
 			return Math.max(_edge.getDest(), _edge.getSrc());
 		}
 		return Math.min(_edge.getDest(), _edge.getSrc());
 	}
+
+	/**
+	 * This method sets the new edge to the pokemon.
+	 * @param _edge = edge_data to set for the pokemon.
+	 */
 	public void set_edge(edge_data _edge) {
 		this._edge = _edge;
 	}
 
+	/**
+	 * This method returns the location of the current pokemon in a Point3D format(x,y,z).
+	 * @return Point3D - location of the pokemon.
+	 */
 	public Point3D getLocation() {
 		return _pos;
 	}
+
+	/**
+	 * This method returns the type of the current pokemon (1 / -1)
+	 * @return
+	 */
 	public int getType() {return _type;}
-//	public double getSpeed() {return _speed;}
+
+	/**
+	 * This method returns the value associated with the current pokemon.
+	 * @return
+	 */
 	public double getValue() {return _value;}
 
-	public double getMin_dist() {
-		return min_dist;
-	}
-
-	public void setMin_dist(double mid_dist) {
-		this.min_dist = mid_dist;
-	}
-
-	public int getMin_ro() {
-		return min_ro;
-	}
-
-	public void setMin_ro(int min_ro) {
-		this.min_ro = min_ro;
-	}
 }
