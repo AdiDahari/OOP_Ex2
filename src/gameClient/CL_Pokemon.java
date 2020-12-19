@@ -86,13 +86,13 @@ public class CL_Pokemon {
 
 	/**
 	 * This method returns the type of the current pokemon (1 / -1)
-	 * @return
+	 * @return int - type of the pokemon.
 	 */
 	public int getType() {return _type;}
 
 	/**
 	 * This method returns the value associated with the current pokemon.
-	 * @return
+	 * @return double - value of the pokemon.
 	 */
 	public double getValue() {return _value;}
 
