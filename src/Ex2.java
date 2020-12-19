@@ -74,7 +74,7 @@ public class Ex2 implements Runnable {
     public void run() {
         game_service game = Game_Server_Ex2.getServer(_scNum); // you have [0,23] games
 
-        //game.login(_id);
+        game.login(_id);
         String g = game.getGraph();
         String pks = game.getPokemons();
         dw_graph_algorithms ga = new DWGraph_Algo();
@@ -181,8 +181,6 @@ public class Ex2 implements Runnable {
                 if(agent.getID() != agKey && paths.containsKey(agent.getID())){
                     if(paths != null && paths.containsKey(agent.getID()) && paths.get(agent.getID()).contains(g.getNode(poke.get_edge().getDest()))) flag = true;
                 }
-
-                if(agent.getID() != agKey && poke == agent.get_curr_fruit()) flag = true;
             }
             if(flag) continue;
             double val = poke.getValue();

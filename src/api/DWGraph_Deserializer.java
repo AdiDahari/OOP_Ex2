@@ -5,6 +5,10 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
+/**
+ * This class deserialize directed weighted graph from JSON String.
+ * made a few changes after starting part 2 of the assignment to match the graph json provided.
+ */
 public class DWGraph_Deserializer implements JsonDeserializer {
     @Override
     public DWGraph_DS deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
