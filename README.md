@@ -1,3 +1,3 @@
 <p align="center">
-  <img src="https://media.giphy.com/media/rAm0u2k17rM3e/giphy.gif" alt="animated" />
+  <img src="https://www.pngfind.com/pngs/m/35-351621_pokemon-miracle-twin-trademark-registered-in-japan-pokemon.png" alt="animated" />
 </p>
