@@ -9,19 +9,23 @@ import org.json.JSONObject;
 
 /**
  * This class implements an agent - a "Pokemon Trainer" that collects pokemon and receives their values.
+ * each CL_Agent contains:
+ * 1. _id = Integer represents each agent's unique key value
+ * 2. _pos = geo_location for marking relevant geographic location of each agent.
+ * 3. _speed = double represents current speed of each agent.
+ * 4. _curr_edge = edge_data which the agent is currently on, if moving.
+ * 5. _curr_node = node_data which the agent is currently on, if not moving.
+ * 6. _gg = directed_weighted_graph whcih the agent is on.
+ * 7. _value = double representing the current value associated with this agent.
  */
 public class CL_Agent {
 	public static final double EPS = 0.0001;
-	private static int _count = 0;
-	private static int _seed = 3331;
 	private int _id;
 	private geo_location _pos;
 	private double _speed;
 	private edge_data _curr_edge;
 	private node_data _curr_node;
 	private directed_weighted_graph _gg;
-	private CL_Pokemon _curr_fruit;
-	private long _sg_dt;
 	private double _value;
 
 	/**
