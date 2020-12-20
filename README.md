@@ -15,7 +15,10 @@ An agent that catches a Pokemon is being awarded by it's value.
 By the end of each scenario of the game, the sum of all agents' values is the final result.
 
 This project is a product of 2 layers:
-1. Directed weighted graph implementation including:
+
+1. Directed weighted graph implementation including
+	
+	
 	**A.** Node implementation 
 	(interface: node_data.java, implementation: NodeData.java).
 	
@@ -28,7 +31,9 @@ This project is a product of 2 layers:
 	**D.** Relevant algorithms (such as finding the weight of a path between 2 nodes in graph)
 	(interface: dw_graph_algorithms, implementation: DWGraph_Algo.java)
 
-2. Game components implementation including:
+2. Game components implementation including
+	
+	
 	**A.** Game Manager which communicates with the server and transfers the relevant information during game run, as well as handling the thread of the game on the run.
 	
 	**B.** Arena which contains all of the game's elements such as Agents on mapand their parameters, Pokemons on map and their parameters.
