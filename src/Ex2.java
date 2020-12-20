@@ -261,7 +261,7 @@ public class Ex2 implements Runnable {
      * start button invoking the lambda expression and closing the current gui and then opens the game itself in a new gui.
      */
     public static class Login extends JPanel {
-        private ImageIcon bg = new ImageIcon("gui/background.jpg");
+        private ImageIcon bg = new ImageIcon("./gui/background.jpg");
 
         /**
          * paintComponenets is extended to have a nice background for the login page.
