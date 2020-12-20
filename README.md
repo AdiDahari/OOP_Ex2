@@ -1,3 +1,3 @@
 <p align="center">
-  <img src="https://www.pngfind.com/pngs/m/35-351621_pokemon-miracle-twin-trademark-registered-in-japan-pokemon.png" alt="animated" />
+  <img src="https://www.pikpng.com/pngl/m/31-319697_pokemon-logo-png-transparent-pokemon-logo-png-images.png" alt="Pokemon Logo Png Transparent Pokemon Logo Png Images - Pokemon Logo Clipart@pikpng.com">
 </p>
