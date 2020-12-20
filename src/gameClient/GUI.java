@@ -96,8 +96,8 @@ public class GUI extends JFrame {
          * @param g
          */
         private void drawPokemons(Graphics g) {
-            ImageIcon articuno = new ImageIcon("./gui/articuno.png");
-            ImageIcon multres = new ImageIcon("./gui/multres.png");
+            ImageIcon articuno = new ImageIcon("gui/articuno.png");
+            ImageIcon multres = new ImageIcon("gui/multres.png");
             List<CL_Pokemon> p = _ar.getPokemons();
 
             if (p != null) {
@@ -128,7 +128,7 @@ public class GUI extends JFrame {
          * @param g
          */
         private void drawAgents(Graphics g) {
-            ImageIcon ball = new ImageIcon("./gui/pokeball.png");
+            ImageIcon ball = new ImageIcon("gui/pokeball.png");
             List<CL_Agent> a = _ar.getAgents();
             g.setColor(Color.cyan);
             int i = 0;
@@ -197,7 +197,7 @@ public class GUI extends JFrame {
         if (_ar != null) {
             Panel p = new Panel();
             add(p);
-            setIconImage(new ImageIcon("./gui/icon.png").getImage());
+            setIconImage(new ImageIcon("gui/icon.png").getImage());
             revalidate();
         }
     }
